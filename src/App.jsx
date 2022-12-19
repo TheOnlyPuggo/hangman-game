@@ -1,17 +1,25 @@
 import { useState } from "react";
 
-// components
-import StartScreen from "./components/StartScreen";
-import PlayerSizeScreen from "./components/PlayerSizeScreen";
+// pages
+import StartScreen from "./pages/StartScreen";
+import PlayerSizeScreen from "./pages/PlayerSizeScreen";
+import CreateWordScreen from "./pages/CreateWordScreen";
 
 function App() {
 	const [showStartScreen, setShowStartScreen] = useState(true);
 	const [showPlayerSelectScreen, setShowPlayerSelectScreen] = useState(false);
+	const [showCreateWordScreen, setShowCreateWordScreen] = useState(false);
 
 	// homescreen
 	function onStartButton() {
 		setShowStartScreen(false);
 		setShowPlayerSelectScreen(true);
+	}
+
+	// playerselectscreen
+	function onLocalMultiplayer() {
+		setShowPlayerSelectScreen(false);
+		setShowCreateWordScreen(true);
 	}
 
 	return (
@@ -21,7 +29,12 @@ function App() {
 				{showStartScreen && <StartScreen onStartButton={onStartButton} />}
 
 				{/* playerselectscreen */}
-				{showPlayerSelectScreen && <PlayerSizeScreen />}
+				{showPlayerSelectScreen && (
+					<PlayerSizeScreen onLocalMultiplayer={onLocalMultiplayer} />
+				)}
+
+				{/* createwordscreen */}
+				{showCreateWordScreen && <CreateWordScreen />}
 			</div>
 		</div>
 	);
