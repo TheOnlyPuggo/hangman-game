@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-function CreateWordScreen() {
+function CreateWordScreen(props) {
 	const [newWordInfo, setNewWordInfo] = useState({
 		category: "",
 		word: "",
@@ -14,6 +14,17 @@ function CreateWordScreen() {
 				[name]: value,
 			};
 		});
+	};
+
+	const onCreate = () => {
+		if (newWordInfo.category.length + newWordInfo.word.length >= 2) {
+			props.setWordInfo(newWordInfo);
+			props.onHangmanStartTwoPlayer();
+			setNewWordInfo({
+				category: "",
+				word: "",
+			});
+		}
 	};
 
 	return (
@@ -35,7 +46,10 @@ function CreateWordScreen() {
 				value={newWordInfo.word}
 				className="w-80 rounded-lg px-2 h-10 text-lg bg-blue-200 outline-none border-2 border-blue-300 focus:border-blue-600"
 			/>
-			<button className="bg-green-400 h-12 rounded-xl text-white hover:bg-green-500 active:bg-green-700">
+			<button
+				onClick={onCreate}
+				className="bg-green-400 h-12 rounded-xl text-white hover:bg-green-500 active:bg-green-700"
+			>
 				Create
 			</button>
 		</div>

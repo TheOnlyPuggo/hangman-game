@@ -1,14 +1,19 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 // pages
 import StartScreen from "./pages/StartScreen";
 import PlayerSizeScreen from "./pages/PlayerSizeScreen";
 import CreateWordScreen from "./pages/CreateWordScreen";
+import HangmanScreen from "./pages/HangmanScreen";
 
 function App() {
+	// screenstates
 	const [showStartScreen, setShowStartScreen] = useState(true);
 	const [showPlayerSelectScreen, setShowPlayerSelectScreen] = useState(false);
 	const [showCreateWordScreen, setShowCreateWordScreen] = useState(false);
+	const [showHangmanScreen, setShowHangmanScreen] = useState(false);
+
+	const [wordInfo, setWordInfo] = useState({});
 
 	// homescreen
 	function onStartButton() {
@@ -20,6 +25,11 @@ function App() {
 	function onLocalMultiplayer() {
 		setShowPlayerSelectScreen(false);
 		setShowCreateWordScreen(true);
+	}
+
+	function onHangmanStartTwoPlayer() {
+		setShowHangmanScreen(true);
+		setShowCreateWordScreen(false);
 	}
 
 	return (
@@ -34,7 +44,15 @@ function App() {
 				)}
 
 				{/* createwordscreen */}
-				{showCreateWordScreen && <CreateWordScreen />}
+				{showCreateWordScreen && (
+					<CreateWordScreen
+						setWordInfo={setWordInfo}
+						onHangmanStartTwoPlayer={onHangmanStartTwoPlayer}
+					/>
+				)}
+
+				{/* hangmanscreen */}
+				{showHangmanScreen && <HangmanScreen word={wordInfo.word} />}
 			</div>
 		</div>
 	);
