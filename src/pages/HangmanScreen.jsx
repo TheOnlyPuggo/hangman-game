@@ -27,6 +27,7 @@ function HangmanScreen(props) {
 		let tempHiddenWordSplit = [...tempHiddenWord];
 		let letterCorrect = false;
 		let alreadyUsed = false;
+		let checkWord = "";
 
 		if (wordInput.length !== 0) {
 			if (wordInput.length === 1) {
@@ -39,9 +40,14 @@ function HangmanScreen(props) {
 					if (value === wordInput && !alreadyUsed) {
 						tempHiddenWordSplit[index] = wordInput;
 						setHiddenWord(tempHiddenWordSplit.join(""));
+						checkWord = tempHiddenWordSplit.join("");
 						letterCorrect = true;
 					}
 				});
+			}
+
+			if (props.word === checkWord) {
+				props.onWin();
 			}
 
 			if (!letterCorrect && !alreadyUsed) {

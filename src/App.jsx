@@ -6,6 +6,7 @@ import PlayerSizeScreen from "./pages/PlayerSizeScreen";
 import CreateWordScreen from "./pages/CreateWordScreen";
 import HangmanScreen from "./pages/HangmanScreen";
 import GameOverScreen from "./pages/GameOverScreen";
+import YouWinScreen from "./pages/YouWinScreen";
 
 function App() {
 	// screenstates
@@ -14,6 +15,7 @@ function App() {
 	const [showCreateWordScreen, setShowCreateWordScreen] = useState(false);
 	const [showHangmanScreen, setShowHangmanScreen] = useState(false);
 	const [showGameOverScreen, setShowGameOverScreen] = useState(false);
+	const [showYouWinScreen, setShowYouWinScreen] = useState(false);
 
 	const [wordInfo, setWordInfo] = useState({});
 
@@ -33,13 +35,18 @@ function App() {
 	}
 
 	function onGameOver() {
-		console.log("ADASI");
 		setShowHangmanScreen(false);
 		setShowGameOverScreen(true);
 	}
 
+	function onWin() {
+		setShowHangmanScreen(false);
+		setShowYouWinScreen(true);
+	}
+
 	function onNewGame() {
 		setShowStartScreen(true);
+		setShowYouWinScreen(false);
 		setShowGameOverScreen(false);
 	}
 
@@ -67,10 +74,13 @@ function App() {
 						category={wordInfo.category}
 						word={wordInfo.word}
 						onGameOver={onGameOver}
+						onWin={onWin}
 					/>
 				)}
 				{/* gameoverscreen */}
 				{showGameOverScreen && <GameOverScreen onNewGame={onNewGame} />}
+				{/* youwinscreen */}
+				{showYouWinScreen && <YouWinScreen onNewGame={onNewGame} />}
 			</div>
 		</div>
 	);
