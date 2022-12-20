@@ -11,7 +11,11 @@ function HangmanScreen(props) {
 		setHiddenWord("");
 		setWordSplit([...props.word]);
 		[...props.word].forEach((element) => {
-			setHiddenWord((prev) => prev + "_");
+			if (element !== " ") {
+				setHiddenWord((prev) => prev + "_");
+			} else {
+				setHiddenWord((prev) => prev + " ");
+			}
 		});
 		setLives(Math.round(props.word.length * 1.1));
 	}, []);
@@ -44,19 +48,25 @@ function HangmanScreen(props) {
 						letterCorrect = true;
 					}
 				});
+
+				if (!letterCorrect && !alreadyUsed) {
+					if (lives === 1) {
+						props.onGameOver();
+					}
+
+					setLives((prev) => prev - 1);
+					setIncorrectLetters((prev) => [...prev, wordInput].sort());
+				}
+			} else {
+				if (wordInput === props.word) {
+					props.onWin();
+				} else {
+					setLives((prev) => prev - 1);
+				}
 			}
 
 			if (props.word === checkWord) {
 				props.onWin();
-			}
-
-			if (!letterCorrect && !alreadyUsed) {
-				if (lives === 1) {
-					props.onGameOver();
-				}
-
-				setLives((prev) => prev - 1);
-				setIncorrectLetters((prev) => [...prev, wordInput].sort());
 			}
 		}
 
