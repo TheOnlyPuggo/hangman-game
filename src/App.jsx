@@ -50,9 +50,10 @@ function App() {
 						onHangmanStartTwoPlayer={onHangmanStartTwoPlayer}
 					/>
 				)}
-
 				{/* hangmanscreen */}
-				{showHangmanScreen && <HangmanScreen word={wordInfo.word} />}
+				{showHangmanScreen && (
+					<HangmanScreen category={wordInfo.category} word={wordInfo.word} />
+				)}
 			</div>
 		</div>
 	);

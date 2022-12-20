@@ -8,12 +8,22 @@ function CreateWordScreen(props) {
 
 	const updateState = (event) => {
 		const { name, value } = event.target;
-		setNewWordInfo((prev) => {
-			return {
-				...prev,
-				[name]: value,
-			};
-		});
+		if (name === "word") {
+			let wordToLower = value.toLowerCase();
+			setNewWordInfo((prev) => {
+				return {
+					...prev,
+					word: wordToLower,
+				};
+			});
+		} else {
+			setNewWordInfo((prev) => {
+				return {
+					...prev,
+					category: value,
+				};
+			});
+		}
 	};
 
 	const onCreate = () => {
