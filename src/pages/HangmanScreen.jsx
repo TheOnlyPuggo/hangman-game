@@ -4,6 +4,8 @@ function HangmanScreen(props) {
 	const [wordSplit, setWordSplit] = useState([]);
 	const [hiddenWord, setHiddenWord] = useState("");
 	const [wordInput, setWordInput] = useState("");
+	const [lives, setLives] = useState(null);
+	const [incorrectLetters, setIncorrectLetters] = useState([]);
 
 	useEffect(() => {
 		setHiddenWord("");
@@ -11,6 +13,7 @@ function HangmanScreen(props) {
 		[...props.word].forEach((element) => {
 			setHiddenWord((prev) => prev + "_");
 		});
+		setLives(Math.round(props.word.length * 1.1));
 	}, []);
 
 	const changeWordInput = (event) => {
@@ -22,26 +25,53 @@ function HangmanScreen(props) {
 	const onEnter = () => {
 		let tempHiddenWord = hiddenWord;
 		let tempHiddenWordSplit = [...tempHiddenWord];
+		let letterCorrect = false;
+		let alreadyUsed = false;
+
 		if (wordInput.length !== 0) {
 			if (wordInput.length === 1) {
+				incorrectLetters.forEach((letter) => {
+					if (letter === wordInput) {
+						alreadyUsed = true;
+					}
+				});
 				wordSplit.forEach((value, index) => {
-					if (value === wordInput) {
+					if (value === wordInput && !alreadyUsed) {
 						tempHiddenWordSplit[index] = wordInput;
 						setHiddenWord(tempHiddenWordSplit.join(""));
+						letterCorrect = true;
 					}
 				});
 			}
+
+			if (!letterCorrect && !alreadyUsed) {
+				if (lives === 1) {
+					props.onGameOver();
+				}
+
+				setLives((prev) => prev - 1);
+				setIncorrectLetters((prev) => [...prev, wordInput].sort());
+			}
 		}
+
+		if (!alreadyUsed) {
+			setWordInput("");
+		}
+	};
+
+	const handleSubmit = (event) => {
+		event.preventDefault();
 	};
 
 	return (
 		<div className="flex flex-col mt-[-50px] items-center">
+			<p className="text-white text-2xl">Lives left: {lives}</p>
 			<p className="text-white text-4xl">Category: {props.category}</p>
 			<p className="text-white text-6xl text-center tracking-widest">
 				{hiddenWord}
 			</p>
 
-			<div className="mt-20 flex gap-5">
+			<form className="mt-20 flex gap-5" onSubmit={handleSubmit}>
 				<input
 					className="w-80 rounded-lg px-2 h-10 text-lg bg-blue-200 outline-none border-2 border-blue-300 focus:border-blue-600"
 					placeholder="Guess Letter/Word"
@@ -49,12 +79,15 @@ function HangmanScreen(props) {
 					value={wordInput}
 				/>
 				<button
+					type="submit"
 					onClick={onEnter}
 					className="bg-green-400 w-32 rounded-xl text-white hover:bg-green-500 active:bg-green-700"
 				>
 					Enter
 				</button>
-			</div>
+			</form>
+			<p className="text-white text-5xl mt-10">Incorrect Letters:</p>
+			<p className="text-white text-4xl mt-5">{incorrectLetters.toString()}</p>
 		</div>
 	);
 }

@@ -5,6 +5,7 @@ import StartScreen from "./pages/StartScreen";
 import PlayerSizeScreen from "./pages/PlayerSizeScreen";
 import CreateWordScreen from "./pages/CreateWordScreen";
 import HangmanScreen from "./pages/HangmanScreen";
+import GameOverScreen from "./pages/GameOverScreen";
 
 function App() {
 	// screenstates
@@ -12,16 +13,15 @@ function App() {
 	const [showPlayerSelectScreen, setShowPlayerSelectScreen] = useState(false);
 	const [showCreateWordScreen, setShowCreateWordScreen] = useState(false);
 	const [showHangmanScreen, setShowHangmanScreen] = useState(false);
+	const [showGameOverScreen, setShowGameOverScreen] = useState(false);
 
 	const [wordInfo, setWordInfo] = useState({});
 
-	// homescreen
 	function onStartButton() {
 		setShowStartScreen(false);
 		setShowPlayerSelectScreen(true);
 	}
 
-	// playerselectscreen
 	function onLocalMultiplayer() {
 		setShowPlayerSelectScreen(false);
 		setShowCreateWordScreen(true);
@@ -30,6 +30,17 @@ function App() {
 	function onHangmanStartTwoPlayer() {
 		setShowHangmanScreen(true);
 		setShowCreateWordScreen(false);
+	}
+
+	function onGameOver() {
+		console.log("ADASI");
+		setShowHangmanScreen(false);
+		setShowGameOverScreen(true);
+	}
+
+	function onNewGame() {
+		setShowStartScreen(true);
+		setShowGameOverScreen(false);
 	}
 
 	return (
@@ -52,8 +63,14 @@ function App() {
 				)}
 				{/* hangmanscreen */}
 				{showHangmanScreen && (
-					<HangmanScreen category={wordInfo.category} word={wordInfo.word} />
+					<HangmanScreen
+						category={wordInfo.category}
+						word={wordInfo.word}
+						onGameOver={onGameOver}
+					/>
 				)}
+				{/* gameoverscreen */}
+				{showGameOverScreen && <GameOverScreen onNewGame={onNewGame} />}
 			</div>
 		</div>
 	);
